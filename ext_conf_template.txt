@@ -1,0 +1,29 @@
+# cat=pxa_newstofb; type=string; label=Facebook Application ID: The ID of your Facebook application
+appId = 
+	
+# cat=pxa_newstofb; type=string; label=Facebook secret: The application secret of your Facebook application
+secret = 
+
+# cat=pxa_newstofb; type=string; label=Fan page ID: The ID of the page that you want this application to post to. Use "," to separate when you have more than one page
+pageId = 
+
+# cat=pxa_newstofb; type=string; label=Group page ID: The ID of the group that you want this application to post to. Use "," to separate when you have more than one group
+groupId = 
+
+# cat=pxa_newstofb; type=string; label=Facebook authorize code: To get this code paste this url to the browser https://graph.facebook.com/oauth/authorize?client_id=<APP_ID>&scope=email,publish_stream,offline_access,manage_pages&redirect_uri=<YOUR_URL>&display=popup
+authCode =
+
+# cat=pxa_newstofb; type=string; label=Application site url: The website url that you set in your application <http://www.example.com/>
+webUrl =  
+
+# cat=pxa_newstofb; type=int; size=4; label=News single view PID: The id of the page where you have installed the single view of the news.
+detailNewsPid = 
+
+# cat=pxa_newstofb; type=string; label=Category: The UID of tt_news categories that are allowed. If not set, all categories are allowed. Use "," to separate when you have more than one category
+categoryId =
+
+# cat=pxa_newstofb; type=int; size=4; label=Lenght of description: The number of characters that you want to display in the description of the post. If subheader not exists, it is taken from body text of each news.
+descLength = 300  
+
+#cat=pxa_newstofb; type=string; label=Log File Path: This is the path to the log file where messages will be saved when the event occurs.
+logFilePath = fileadmin/user_upload/pxa_newstofb_log.txt

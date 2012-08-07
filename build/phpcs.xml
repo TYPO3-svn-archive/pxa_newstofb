@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<ruleset name="TYPO3 CGL">
+	<description>
+		TYPO3 coding standard
+
+		More information
+		================
+		@see http://forge.typo3.org/projects/team-forge/wiki/The_sniffs_with_code_examples
+		@see http://www.assembla.com/code/pti/subversion/nodes/libraries/pear/PEAR/PHP/CodeSniffer/Standards/TYPO3v4/ruleset.xml
+
+		Steps to install
+		================
+
+		Check: http://pear.typo3.org/
+
+		pear channel-discover pear.typo3.org
+		pear remote-list -c typo3
+		pear install typo3/PHPCS_TYPO3_SniffPool
+		pear install typo3/PHPCS_TYPO3v4_Standard
+	</description>
+
+	<!-- Arrays -->
+	<rule ref="Squiz.Arrays.ArrayBracketSpacing" />
+
+	<!-- Classes -->
+	<rule ref="Squiz.Classes.SelfMemberReference" />
+	<!-- <rule ref="TYPO3.Classes.LowercaseClassKeywords" /> NOT WITH EXTBASE -->
+
+	<!-- CodeAnalysis -->
+	<rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall" />
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter" />
+
+	<!-- Commenting -->
+	<rule ref="PEAR.Commenting.InlineComment" />
+	<rule ref="TYPO3.Commenting.ClassDocComment" />
+	<rule ref="TYPO3.Commenting.DoubleSlashCommentsInNewLine" />
+	<rule ref="TYPO3.Commenting.FunctionDocComment" />
+	<rule ref="TYPO3.Commenting.NoAuthorAnnotationInFunctionDocComment" />
+	<rule ref="TYPO3.Commenting.SpaceAfterDoubleSlash" />
+	<rule ref="TYPO3.Commenting.ValidCommentLineLength" />
+		
+	<rule ref="TYPO3.Commenting.ValidCommentIndent" />
+
+	<!-- Control structures -->
+	<rule ref="Generic.ControlStructures.InlineControlStructure" />
+	<rule ref="Squiz.ControlStructures.ControlSignature" />
+	<rule ref="TYPO3.ControlStructures.AlignedBreakStatement" />
+	<rule ref="TYPO3.ControlStructures.DisallowElseIfConstruct" />
+	<rule ref="TYPO3.ControlStructures.ValidBreakStatementsInSwitches" />
+	<rule ref="TYPO3.ControlStructures.ValidDefaultStatementsInSwitches" />
+
+	<!-- Debug -->
+	<rule ref="TYPO3.Debug.DebugCode" />
+
+	<!-- Files -->
+	<rule ref="Generic.Files.LineLength">
+		<properties>
+			<property name="lineLimit" value="130"/>
+			<property name="absoluteLineLimit" value="200"/>
+		</properties>
+	</rule>
+	<rule ref="Generic.Files.LineEndings" />
+	<rule ref="TYPO3.Files.EncodingUtf8" />
+	<rule ref="TYPO3.Files.IncludingFile" />
+	<!-- <rule ref="TYPO3.Files.LowercasedFilename" /> NOT WITH EXTBASE -->
+	<rule ref="TYPO3.Files.OneClassPerFile" />
+	<rule ref="TYPO3.Files.OneInterfacePerFile" />
+
+	<!-- Formatting -->
+	<rule ref="Generic.Formatting.DisallowMultipleStatements" />
+
+	<!-- Functions -->
+	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />
+	<rule ref="Generic.Functions.FunctionCallArgumentSpacing" />
+	<rule ref="Generic.Functions.OpeningFunctionBraceKernighanRitchie" />
+	<rule ref="PEAR.Functions.ValidDefaultValue" />
+
+	<!-- Metrics -->
+
+	<!-- NamingConventions -->
+	<rule ref="Generic.NamingConventions.ConstructorName" />
+	<rule ref="TYPO3.NamingConventions.ValidFunctionName" />
+	<rule ref="TYPO3.NamingConventions.ValidVariableName" />
+
+	<!-- Objects -->
+
+	<!-- Operators -->
+
+	<!-- PHP -->
+	<rule ref="Generic.PHP.DeprecatedFunctions" />
+	<rule ref="Generic.PHP.DisallowShortOpenTag" />
+	<rule ref="Generic.PHP.UpperCaseConstant" />
+	<rule ref="Squiz.PHP.Eval" />
+	<rule ref="Squiz.PHP.GlobalKeyword" />
+	<rule ref="Squiz.PHP.NonExecutableCode" />
+	<rule ref="TYPO3.PHP.CharacterAfterPHPClosingTag" />
+	<rule ref="TYPO3.PHP.CharacterBeforePHPOpeningTag" />
+	<rule ref="TYPO3.PHP.ClosingPHPTag" />
+	<rule ref="TYPO3.PHP.DisallowMultiplePHPTags" />
+	<!-- <rule ref="TYPO3.PHP.XClass" /> NOT APPLIED TO EXTBASE EXTENSION -->
+
+	<!-- Scope -->
+	<rule ref="Squiz.Scope.MemberVarScope" />
+	<rule ref="Squiz.Scope.MethodScope" />
+	<rule ref="TYPO3.Scope.AlwaysReturn" />
+
+	<!-- Strings -->
+	<rule ref="Squiz.Strings.DoubleQuoteUsage" />
+	<rule ref="TYPO3.Strings.UnnecessaryStringConcat" />
+
+	<!-- Whitespace -->
+	<rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
+	<rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing" />
+	<rule ref="TYPO3.WhiteSpace.AssignmentArithmeticAndComparisonSpace" />
+	<rule ref="TYPO3.WhiteSpace.AsteriksWhitespaces" />
+	<rule ref="TYPO3.WhiteSpace.DisallowSpaceIndent" />
+	<!--<rule ref="TYPO3.WhiteSpace.NoTrailingWhitespace" /> NOT IMPLEMENTED YET-->
+
+<!--
+
+ More rules given as example by Sebastian Bergmann:
+
+ <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
+ <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
+ <rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
+ <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
+ <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
+ <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
+
+ <rule ref="Generic.Commenting.Todo"/>
+
+ <rule ref="Generic.ControlStructures.InlineControlStructure"/>
+
+ <rule ref="Generic.Files.LineEndings"/>
+
+ <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
+ <rule ref="Generic.Formatting.MultipleStatementAlignment"/>
+ <rule ref="Generic.Formatting.NoSpaceAfterCast"/>
+
+ <rule ref="Generic.Functions.OpeningFunctionBraceBsdAllman"/>
+ <rule ref="PEAR.Functions.ValidDefaultValue"/>
+
+ <rule ref="Generic.NamingConventions.ConstructorName"/>
+ <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
+ <rule ref="PEAR.NamingConventions.ValidClassName"/>
+
+ <rule ref="Generic.PHP.DisallowShortOpenTag"/>
+ <rule ref="Generic.PHP.NoSilencedErrors"/>
+ <rule ref="Generic.PHP.UpperCaseConstant"/>
+
+ <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
+ <rule ref="Generic.WhiteSpace.ScopeIndent"/>
+ <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>-->
+</ruleset>
