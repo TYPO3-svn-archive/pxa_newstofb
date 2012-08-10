@@ -35,6 +35,8 @@
 	b. Application secret: enter your application secret
 	c. Fan page ID: Id of the fan page
 	d. Group page ID: id of the group page
+     Group page can be used to post on private wall aswell. Go to your own wall and look att the URL.
+     It says something like http://www.facebook.com/john.doe, use john.doe as your Group page ID to post to your own wall.
 	e. Facebook authorize code: the code you get from (2)
 	f. Application site url: the site url of your application when you create the application see (1)
 	g. Detail news PID: the detail page id of your news page where you have installed the single view of the news.

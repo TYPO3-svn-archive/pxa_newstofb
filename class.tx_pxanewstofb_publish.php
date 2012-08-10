@@ -39,7 +39,7 @@ require_once(PATH_t3lib . 'class.t3lib_timetrack.php');
  *
  */
 class tx_pxanewstofb_publish extends tx_scheduler_Task {
-
+                                                                
 	private $cobj;
 
 	/**
@@ -48,7 +48,7 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 	 * @return boolean - True when the task executed successfully
 	 */
 	public function execute() {
-
+  
 		global $GLOBALS, $tsfe, $TYPO3_CONF_VARS;
 
 			// Get pxa_newstofb extConf array
@@ -65,8 +65,9 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 		$tsfe = new tslib_fe($TYPO3_CONF_VARS, $fbAppSettings['detailNewsPid'], 0, 0);
 		$tsfe->connectToDB();
 		$tsfe->initFEuser();
-		$tsfe->fetch_the_id();
+    $tsfe->fetch_the_id();      
 		$tsfe->getPageAndRootline();
+		$this->cObj->start(array(), '');
 		$tsfe->initTemplate();
 		$tsfe->forceTemplateParsing = 1;
 		$tsfe->getConfigArray();
@@ -74,10 +75,10 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 		$tsfe->initTemplate();
 		$tsfe->determineId();
 		$GLOBALS['TSFE'] = $tsfe;
-		$this->cObj->start(array(), '');
+
 
 		Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYPEER] = FALSE;
-
+  
 			// Facebook API instance with appId and secret
 		$facebook = new Facebook(
 			array(
@@ -92,15 +93,16 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 			'&redirect_uri=' . $fbAppSettings['webUrl'] . '&client_secret=' . $fbAppSettings['secret'] .
 			'&code=' . $fbAppSettings['authCode'];
 		$groupAccessToken = t3lib_div::getURL($url);
-
+      
 			// We need only the access token code so cut the word "access_token="
 			// This access token is valid for group or non-owner of the page
-		$groupAccessToken = substr($groupAccessToken, 13);
-
+		$groupAccessToken = explode('&expires=', substr($groupAccessToken, 13));
+    $groupAccessToken = $groupAccessToken[0];
+    
 			// Generate new access token for page
 			// This help to post attachment to FB as admin of the page
 		$pagesResponse = json_decode(t3lib_div::getURL('https://graph.facebook.com/me/accounts?access_token=' . $groupAccessToken));
-
+    
 			// If joson_decode return null, cannot post the page as admin
 		if (is_null($pagesResponse)) {
 			$pageAccessToken = $groupAccessToken;
@@ -128,7 +130,7 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 		$inCat = '';
 		$table = 'tt_news';
 		$where = 'tx_pxanewstofb_published = 0  AND tx_pxanewstofb_dont_publish = 0 ' . $this->enableFields('tt_news');
-
+     
 			// Get and validate the list of selected news categories
 		$selectedNewsCategories = array();
 		$selectedNewsCategories = t3lib_div::intExplode(',', $fbAppSettings['categoryId'], TRUE);
@@ -146,7 +148,7 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 			$where = 'tx_pxanewstofb_published = 0  AND tx_pxanewstofb_dont_publish = 0 ' . $inCat . $this->enableFields('tt_news');
 		}
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tt_news.*', $table, $where, 'tt_news.uid');
-
+    
 		$newsUid = '';
 		$newsImagePath = $GLOBALS['TCA']['tt_news']['columns']['image']['config']['uploadfolder'];
 		if (! $newsImagePath) {
@@ -162,6 +164,7 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 		if ($host == '') {
 			$host = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
 		}
+    
 		$messages = array();
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			try {
@@ -172,8 +175,8 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 					'additionalParams' => '&tx_ttnews[tt_news]=' . $row['uid'],
 					'useCacheHash' => TRUE
 				);
-				$newslink = $this->cObj->typolink_URL($typolinkConf);
-
+				$newslink = $this->cObj->typolink_URL($typolinkConf);     
+        
 					// only add webUrl if generated $newsLink is not already absolute
 				if (substr($newslink, 0, 7) != 'http://' || substr($newslink, 0, 8) != 'https://') {
 					$newslink = $fbAppSettings['webUrl'] . $newslink;
@@ -186,25 +189,37 @@ class tx_pxanewstofb_publish extends tx_scheduler_Task {
 						'name' => $row['title'],
 				);
 
+
 					// If the description length is set , it will show the description text in post
 				if (intval($fbAppSettings['descLength']) > 0) {
 					$desc = strip_tags($row['short'] ? $row['short'] : $row['bodytext']);
 					$desc = preg_replace('/\s+/', ' ', $desc);
+          
 					$desc = $this->cObj->crop($desc, intval($fbAppSettings['descLength']) . '|...|1');
 					$attachment['description'] = $desc;
 				}
-
-					// Get the image path
+        
+				// Get the image path
 				if ($row['image']) {
 					if (strpos($row['image'], ',') > 0) {
 							// Several Pictures in News, only the first will be taken
 						$imagePath = $host . $newsImagePath . '/' . substr($row['image'], 0, strpos($row['image'], ','));
 					} else {
-
 							// Only one Picture in News, this will be taken
 						$imagePath = $host . $newsImagePath . '/' . $row['image'];
 					}
 					$attachment['picture'] = $imagePath;
+				}
+        
+				// Get the image path with DAM
+				if (t3lib_extMgm::isLoaded('dam_ttnews'))    {
+					$attachment['picture'] = '';
+					$damFiles = tx_dam_db::getReferencedFiles('tt_news', $row['uid'], 'tx_damnews_dam_images' );
+					//only the first image will be taken
+					foreach ($damFiles['files'] as $file){
+						$attachment['picture'] = $host.$file;
+						break;
+					}
 				}
 
 					// Post feed to all group
